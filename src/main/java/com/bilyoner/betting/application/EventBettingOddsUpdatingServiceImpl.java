@@ -57,8 +57,9 @@ public class EventBettingOddsUpdatingServiceImpl implements InitializingBean, Ev
 
     @Override
     public EventDto addEvent(EventDto eventDto) {
-        caffeine.synchronous().put(eventDto.getId(), eventDto);
-        return eventService.addEvent(eventDto);
+        var addedEvent = eventService.addEvent(eventDto);
+        caffeine.synchronous().put(addedEvent.getId(), addedEvent);
+        return addedEvent;
     }
 
     @Override

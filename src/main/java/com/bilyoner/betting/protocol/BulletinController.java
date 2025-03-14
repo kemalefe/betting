@@ -13,14 +13,14 @@ import reactor.core.publisher.Flux;
 import java.time.Duration;
 
 @RestController
-@RequestMapping
+@RequestMapping(path = "/api/bulletin")
 @RequiredArgsConstructor
 public class BulletinController {
 
     private final BettingConfig bettingConfig;
     private final EventBettingOddsUpdatingService eventService;
 
-    @GetMapping(value = "/bulletin", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<BulletinResponse> streamBulletin() {
         return Flux.interval(Duration.ofSeconds(bettingConfig.getBulletin().getDuration()))
                 .map(sequence -> new BulletinResponse(eventService.getAllEvents()));

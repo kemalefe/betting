@@ -10,7 +10,7 @@ import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
-@RequestMapping(path = "/event", produces = APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/events", produces = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class EventController {
 
@@ -21,12 +21,12 @@ public class EventController {
         return eventService.getAllEvents();
     }
 
-    @GetMapping("/get/{eventId}")
-    public EventDto getEvent(@PathVariable Long eventId) {
-        return eventService.getEvent(eventId);
+    @GetMapping("/{id}")
+    public EventDto getEvent(@PathVariable Long id) {
+        return eventService.getEvent(id);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public EventDto add(@RequestBody EventDto event) {
         return eventService.addEvent(event);
     }
