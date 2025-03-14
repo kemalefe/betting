@@ -4,11 +4,14 @@ import com.bilyoner.betting.contract.EventDto;
 import com.bilyoner.betting.domain.Event;
 import com.bilyoner.betting.domain.EventRepository;
 import com.bilyoner.betting.infrastructure.mapper.EventMapper;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Primary
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
@@ -17,8 +20,34 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
 
     @Override
-    public List<EventDto> fetchEvents() {
+    public List<EventDto> getAllEvents() {
         List<Event> allEvents = eventRepository.findAll();
         return eventMapper.toDto(allEvents);
+    }
+
+    @Override
+    public EventDto addEvent(EventDto eventDto) {
+        Event eventEntity = eventMapper.toEntity(eventDto);
+        eventEntity = eventRepository.save(eventEntity);
+        return eventMapper.toDto(eventEntity);
+    }
+
+    @Override
+    public EventDto getEvent(Long eventId) {
+        var eventEntity = getEventEntity(eventId);
+        return eventMapper.toDto(eventEntity);
+    }
+
+    @Override
+    public EventDto updateEvent(EventDto eventDto) {
+        var eventEntity = getEventEntity(eventDto.getId());
+        eventMapper.partialUpdate(eventEntity, eventDto);
+        eventEntity = eventRepository.save(eventEntity);
+        return eventMapper.toDto(eventEntity);
+    }
+
+    private Event getEventEntity(Long eventId) {
+        var optional = eventRepository.findById(eventId);
+        return optional.orElseThrow(() -> new EntityNotFoundException("Event with ID: %s not found".formatted(eventId)));
     }
 }

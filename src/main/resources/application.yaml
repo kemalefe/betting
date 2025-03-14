@@ -1,4 +1,9 @@
+server:
+  shutdown: graceful
+
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
   application:
     name: betting
   datasource:
@@ -21,8 +26,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: none
-    show-sql: true
-#    defer-datasource-initialization: true
+    show-sql: false
   flyway:
     enabled: true
     baseline-on-migrate: true
@@ -31,3 +35,16 @@ spring:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+betting:
+  odds:
+    min-value: 1.5
+    max-value: 3.0
+    update-interval: 1000
+  producer:
+    threads: 5
+  consumer:
+    threads: 10
+    prefetch-count: 10
+  bulletin:
+    duration: 1 # as seconds

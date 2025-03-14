@@ -1,0 +1,18 @@
+package com.bilyoner.betting.contract;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class ErrorDto {
+    private String errorCode;
+    private String errorMessage;
+    private String stackTrace;
+
+    public ErrorDto(String stackTrace) {
+        this.stackTrace = stackTrace;
+    }
+}

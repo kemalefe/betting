@@ -5,5 +5,11 @@ import com.bilyoner.betting.contract.EventDto;
 import java.util.List;
 
 public interface EventService {
-    public List<EventDto> fetchEvents();
+    List<EventDto> getAllEvents();
+
+    EventDto addEvent(EventDto eventDto);
+
+    EventDto getEvent(Long eventId);
+
+    EventDto updateEvent(EventDto eventDto);
 }
