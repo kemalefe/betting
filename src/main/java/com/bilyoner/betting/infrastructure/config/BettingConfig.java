@@ -10,6 +10,9 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 @ConfigurationProperties(prefix = "betting")
 public class BettingConfig {
 
+    Long betFinalizeTimeout;
+    Integer maxCouponCount;
+
     @NestedConfigurationProperty
     OddsConfig odds;
 

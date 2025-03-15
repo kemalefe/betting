@@ -37,10 +37,11 @@ springdoc:
     path: /swagger-ui.html
 
 betting:
+  bet-finalize-timeout: 10 # as seconds
   odds:
     min-value: 1.5
     max-value: 3.0
-    update-interval: 1000
+    update-interval: 5000
   producer:
     threads: 5
   consumer:

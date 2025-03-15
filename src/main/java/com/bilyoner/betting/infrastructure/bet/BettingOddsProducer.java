@@ -53,7 +53,7 @@ public class BettingOddsProducer {
     }
 
     private void updateEventBettingOdds(Long eventId) {
-        var bettingOddsUpdate = new BettingOddsUpdateDto(eventId, randomOdds(), randomOdds(), randomOdds());
+        var bettingOddsUpdate = new BetOddsDto(eventId, randomOdds(), randomOdds(), randomOdds());
         bettingOddsQueue.offer(bettingOddsUpdate);
     }
 

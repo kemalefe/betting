@@ -1,14 +1,13 @@
 package com.bilyoner.betting.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.bilyoner.betting.contract.BetType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -19,7 +18,12 @@ public class BetSlip {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long customerId;
-    private BigDecimal totalBetAmount;
+    private Long eventId;
+    @Enumerated(EnumType.STRING)
+    private BetType betType;
+    private BigDecimal betOdds;
+    private int couponCount;
+    private BigDecimal betAmount;
     private String currencyCode;
-    private Integer numberOfBets;
+    private LocalDateTime createDate;
 }

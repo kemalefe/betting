@@ -2,11 +2,15 @@ package com.bilyoner.betting.infrastructure.mapper;
 
 import com.bilyoner.betting.contract.EventDto;
 import com.bilyoner.betting.domain.Event;
-import org.mapstruct.CollectionMappingStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValueCheckStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface EventMapper extends EntityMapper<EventDto, Event> {
+
+    @Mapping(source = "homeWinBetOdds", target = "betOddsDto.homeWinBetOdds")
+    @Mapping(source = "drawBetOdds", target = "betOddsDto.drawBetOdds")
+    @Mapping(source = "awayWinBetOdds", target = "betOddsDto.awayWinBetOdds")
+    @Mapping(source = "id", target = "betOddsDto.eventId")
+    @Mapping(target = "betOddsDto.updateTimestamp", expression = "java(0L)")
+    EventDto toDto(Event event);
 }

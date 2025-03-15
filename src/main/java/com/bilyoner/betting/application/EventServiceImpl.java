@@ -3,9 +3,10 @@ package com.bilyoner.betting.application;
 import com.bilyoner.betting.contract.EventDto;
 import com.bilyoner.betting.domain.Event;
 import com.bilyoner.betting.domain.EventRepository;
+import com.bilyoner.betting.domain.exception.EventNotFoundException;
 import com.bilyoner.betting.infrastructure.mapper.EventMapper;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
@@ -46,8 +47,9 @@ public class EventServiceImpl implements EventService {
         return eventMapper.toDto(eventEntity);
     }
 
+    @SneakyThrows
     private Event getEventEntity(Long eventId) {
         var optional = eventRepository.findById(eventId);
-        return optional.orElseThrow(() -> new EntityNotFoundException("Event with ID: %s not found".formatted(eventId)));
+        return optional.orElseThrow(() -> new EventNotFoundException(eventId));
     }
 }

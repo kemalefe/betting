@@ -1,0 +1,86 @@
+package com.bilyoner.betting.application;
+
+import com.bilyoner.betting.contract.BetSlipDto;
+import com.bilyoner.betting.contract.BetSlipFinalizeResponse;
+import com.bilyoner.betting.contract.BetSlipInitializeResponse;
+import com.bilyoner.betting.domain.BetSlipRepository;
+import com.bilyoner.betting.domain.exception.BetSlipExpiredException;
+import com.bilyoner.betting.infrastructure.config.BettingConfig;
+import com.bilyoner.betting.infrastructure.mapper.BetSlipMapper;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Service;
+
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
+@Service
+@RequiredArgsConstructor
+public class BetSlipServiceImpl implements BetSlipService, InitializingBean {
+
+    private final BettingConfig bettingConfig;
+    private final EventBettingOddsUpdatingService eventBettingOddsUpdatingService;
+    private final BetSlipRepository betSlipRepository;
+    private final BetSlipMapper betSlipMapper;
+
+    private Cache<String, BetSlipDto> betSlipCaffeine;
+
+    @Override
+    public void afterPropertiesSet() {
+        loadCache();
+    }
+
+    public void loadCache() {
+        betSlipCaffeine = Caffeine.newBuilder()
+                .maximumSize(1000)
+                .expireAfterWrite(10, TimeUnit.MINUTES)
+                .build();
+    }
+
+    @Override
+    public BetSlipInitializeResponse initializeBetSlip(BetSlipDto betSlip) {
+
+        var event = eventBettingOddsUpdatingService.getEvent(betSlip.getEventId());
+
+        var eventBetOdds = event.getBetOdds(betSlip.getBetType());
+        var betOdds = betSlip.getBetOdds();
+
+        var betOddsChanges = !eventBetOdds.equals(betOdds);
+        betOdds = eventBetOdds;
+
+        betSlip.setBetOdds(betOdds);
+        betSlip.setTimestamp(System.currentTimeMillis());
+
+        String uuid = UUID.randomUUID().toString();
+        betSlipCaffeine.put(uuid, betSlip);
+
+        return new BetSlipInitializeResponse(uuid, betOddsChanges, bettingConfig.getBetFinalizeTimeout(), betSlip);
+    }
+
+    @Override
+    public BetSlipFinalizeResponse finalizeBetSlip(String uuid) throws BetSlipExpiredException {
+
+        BetSlipDto betSlipDto = betSlipCaffeine.getIfPresent(uuid);
+        if (betSlipDto == null)
+            throw new BetSlipExpiredException("Bet slip has been expired, please initialize a new bet slip.");
+
+        var betSlipTimestamp = betSlipDto.getTimestamp();
+        var currentTimestamp = System.currentTimeMillis();
+        var maximumAllowedDifference = bettingConfig.getBetFinalizeTimeout() * 1000L;
+
+        if (currentTimestamp - betSlipTimestamp > maximumAllowedDifference) {
+            betSlipCaffeine.invalidate(uuid);
+            var initializeBetSlip = initializeBetSlip(new BetSlipDto(betSlipDto));
+            return new BetSlipFinalizeResponse(initializeBetSlip);
+        }
+
+        var betSlip = betSlipMapper.toEntity(betSlipDto);
+        betSlip = betSlipRepository.save(betSlip);
+        betSlipDto.setId(betSlip.getId());
+
+        betSlipCaffeine.invalidate(uuid);
+        return new BetSlipFinalizeResponse(true, betSlipDto);
+    }
+}

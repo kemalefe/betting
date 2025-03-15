@@ -33,14 +33,14 @@ public class BettingOddsConsumer {
 
         while (true) {
             try {
-                var updates = new ArrayList<BettingOddsUpdateDto>();
+                var updates = new ArrayList<BetOddsDto>();
                 bettingOddsQueue.drainTo(updates, bettingConfig.getConsumer().getPrefetchCount());
                 if (updates.isEmpty()) {
                     updates.add(bettingOddsQueue.take());
                 }
 
                 log.debug("processing {} updates...", updates.size());
-                for (BettingOddsUpdateDto update : updates) {
+                for (BetOddsDto update : updates) {
                     eventBettingOddsUpdatingService.updateBetOdds(update);
                 }
             } catch (Exception e) {

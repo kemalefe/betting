@@ -1,5 +1,6 @@
 package com.bilyoner.betting.contract;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import lombok.Setter;
 public class ErrorDto {
     private String errorCode;
     private String errorMessage;
+    @JsonIgnore
     private String stackTrace;
 
     public ErrorDto(String stackTrace) {

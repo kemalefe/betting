@@ -1,6 +1,7 @@
 package com.bilyoner.betting.contract;
 
-import com.bilyoner.betting.infrastructure.bet.BettingOddsUpdateDto;
+import com.bilyoner.betting.infrastructure.bet.BetOddsDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,21 +22,23 @@ public class EventDto {
     private String leagueName;
     private String homeTeam;
     private String awayTeam;
-    private BigDecimal homeWinBetOdds;
-    private BigDecimal drawBetOdds;
-    private BigDecimal awayWinBetOdds;
     private LocalDateTime matchStartTime;
-    private Long updateMilliseconds;
-    private Long lastUpdateTimestamp;
+    private BetOddsDto betOddsDto;
 
-    public void updateBetOdds(BettingOddsUpdateDto update) {
-        this.homeWinBetOdds = update.getHomeWinBetOdds();
-        this.drawBetOdds = update.getDrawBetOdds();
-        this.awayWinBetOdds = update.getAwayWinBetOdds();
-        this.updateMilliseconds = lastUpdateTimestamp != null ? (System.currentTimeMillis() - lastUpdateTimestamp) : 0;
-        this.lastUpdateTimestamp = System.currentTimeMillis();
+    public void updateBetOdds(BetOddsDto update) {
+        this.betOddsDto = new BetOddsDto(id, update.getHomeWinBetOdds(), update.getDrawBetOdds(), update.getAwayWinBetOdds());
+    }
 
-        if (updateMilliseconds > 1200)
-            log.error("UNACCEPTABLE UPDATE INTERVAL!!! {}", this);
+    @JsonIgnore
+    public BigDecimal getBetOdds(BetType betType) {
+        if (betOddsDto == null) {
+            throw new IllegalStateException("Bet odds of event not exists.");
+        }
+
+        return switch (betType) {
+            case AWAY_WIN -> betOddsDto.getAwayWinBetOdds();
+            case DRAW -> betOddsDto.getDrawBetOdds();
+            case HOME_WIN -> betOddsDto.getHomeWinBetOdds();
+        };
     }
 }

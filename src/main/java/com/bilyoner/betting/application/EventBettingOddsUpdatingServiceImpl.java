@@ -1,7 +1,7 @@
 package com.bilyoner.betting.application;
 
 import com.bilyoner.betting.contract.EventDto;
-import com.bilyoner.betting.infrastructure.bet.BettingOddsUpdateDto;
+import com.bilyoner.betting.infrastructure.bet.BetOddsDto;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +76,7 @@ public class EventBettingOddsUpdatingServiceImpl implements InitializingBean, Ev
     }
 
     @Override
-    public void updateBetOdds(BettingOddsUpdateDto update) {
+    public void updateBetOdds(BetOddsDto update) {
         var eventId = update.getEventId();
         EventDto eventDto = caffeine.get(eventId).join();
         eventDto.updateBetOdds(update);

@@ -9,4 +9,5 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring", collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BetSlipMapper extends EntityMapper<BetSlipDto, BetSlip> {
+
 }

@@ -9,17 +9,17 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Component
 public class BettingOddsQueue {
 
-    private final BlockingQueue<BettingOddsUpdateDto> bettingOddsUpdateDtoQueue = new LinkedBlockingQueue<>();
+    private final BlockingQueue<BetOddsDto> betOddsDtoQueue = new LinkedBlockingQueue<>();
 
-    public boolean offer(BettingOddsUpdateDto update) {
-        return bettingOddsUpdateDtoQueue.offer(update);
+    public boolean offer(BetOddsDto update) {
+        return betOddsDtoQueue.offer(update);
     }
 
-    public BettingOddsUpdateDto take() throws InterruptedException {
-        return bettingOddsUpdateDtoQueue.take();
+    public BetOddsDto take() throws InterruptedException {
+        return betOddsDtoQueue.take();
     }
 
-    public int drainTo(List<BettingOddsUpdateDto> updates, int prefetchCount) {
-        return bettingOddsUpdateDtoQueue.drainTo(updates, prefetchCount);
+    public int drainTo(List<BetOddsDto> updates, int prefetchCount) {
+        return betOddsDtoQueue.drainTo(updates, prefetchCount);
     }
 }
