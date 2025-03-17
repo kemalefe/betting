@@ -7,7 +7,7 @@ import com.bilyoner.betting.domain.core.CustomerDto;
 import com.bilyoner.betting.domain.exception.BetSlipExpiredException;
 import com.bilyoner.betting.contract.BetOddsDto;
 import com.bilyoner.betting.infrastructure.config.BettingConfig;
-import com.bilyoner.betting.infrastructure.mapper.BetSlipMapper;
+import com.bilyoner.betting.infrastructure.BetSlipMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

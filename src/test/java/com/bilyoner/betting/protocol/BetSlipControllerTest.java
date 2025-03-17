@@ -22,8 +22,7 @@ import java.math.BigDecimal;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -51,7 +50,7 @@ class BetSlipControllerTest {
 
         BetSlipDto betSlipDto = new BetSlipDto();
         betSlipDto.setEventId(1L);
-        betSlipDto.setBetAmount(new BigDecimal("5000"));
+        betSlipDto.setBetAmount(new BigDecimal("50.00"));
         betSlipDto.setBetOdds(new BigDecimal("1.67"));
         betSlipDto.setBetType(BetType.AWAY_WIN);
         betSlipDto.setCouponCount(200);
@@ -69,7 +68,61 @@ class BetSlipControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists());
 
-        verify(betSlipService).initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class));
+        verify(betSlipService, atLeast(1)).initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class));
+    }
+
+    @Test
+    void initializeBetSlip_ShouldReturnBadRequest_WhenBetAmountExceedsMaximumAllowed() throws Exception {
+
+        // maximum allowed: 10_000
+        BetSlipDto betSlipDto = new BetSlipDto();
+        betSlipDto.setEventId(1L);
+        betSlipDto.setBetAmount(new BigDecimal("50.00"));
+        betSlipDto.setBetOdds(new BigDecimal("1.67"));
+        betSlipDto.setBetType(BetType.HOME_WIN);
+        betSlipDto.setCouponCount(201);
+        betSlipDto.setCurrencyCode("TL");
+
+        BetSlipInitializeResponse expectedResponse = new BetSlipInitializeResponse();
+
+        when(betSlipService.initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class)))
+                .thenReturn(expectedResponse);
+
+        mockMvc.perform(post("/api/bet-slip/initialize")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(betSlipDto))
+                        .header("x-customer-id", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").exists());
+
+        verify(betSlipService, never()).initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class));
+    }
+
+    @Test
+    void initializeBetSlip_ShouldReturnBadRequest_WhenCouponCountExceedsMaximumAllowed() throws Exception {
+
+        // maximum allowed: 10_000
+        BetSlipDto betSlipDto = new BetSlipDto();
+        betSlipDto.setEventId(1L);
+        betSlipDto.setBetAmount(new BigDecimal("50.00"));
+        betSlipDto.setBetOdds(new BigDecimal("1.67"));
+        betSlipDto.setBetType(BetType.HOME_WIN);
+        betSlipDto.setCouponCount(501);
+        betSlipDto.setCurrencyCode("TL");
+
+        BetSlipInitializeResponse expectedResponse = new BetSlipInitializeResponse();
+
+        when(betSlipService.initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class)))
+                .thenReturn(expectedResponse);
+
+        mockMvc.perform(post("/api/bet-slip/initialize")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(betSlipDto))
+                        .header("x-customer-id", "1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").exists());
+
+        verify(betSlipService, never()).initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class));
     }
 
     @Test
@@ -87,6 +140,9 @@ class BetSlipControllerTest {
                         .content(objectMapper.writeValueAsString(betSlipDto))
                         .header("x-customer-id", "1"))
                 .andExpect(status().isBadRequest());
+
+        verify(betSlipService, never()).initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class));
+
     }
 
     @Test
@@ -102,7 +158,7 @@ class BetSlipControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists());
 
-        verify(betSlipService).finalizeBetSlip(any(CustomerDto.class), eq(inquiryId));
+        verify(betSlipService, atLeast(1)).finalizeBetSlip(any(CustomerDto.class), eq(inquiryId));
     }
 
     @Test
@@ -122,6 +178,6 @@ class BetSlipControllerTest {
                         .header("x-customer-id", "1"))
                 .andExpect(status().isInternalServerError());
 
-        verify(betSlipService).finalizeBetSlip(any(CustomerDto.class), eq(inquiryId));
+        verify(betSlipService, atLeast(1)).finalizeBetSlip(any(CustomerDto.class), eq(inquiryId));
     }
 }

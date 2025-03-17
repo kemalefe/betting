@@ -3,6 +3,7 @@ package com.bilyoner.betting.contract;
 import com.bilyoner.betting.infrastructure.bet.ValidBetSlip;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class BetSlipDto {
     private Long id;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long customerId;
+    @NotNull
     @Positive
     private Long eventId;
     @NotNull

@@ -83,7 +83,7 @@ class EventControllerTest {
         mockMvc.perform(post("/api/events")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(event)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.homeTeam").value("Fenerbahçe"))
                 .andExpect(jsonPath("$.awayTeam").value("Galatasaray"));
 

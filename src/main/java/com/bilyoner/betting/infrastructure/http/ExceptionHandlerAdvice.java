@@ -34,7 +34,7 @@ public class ExceptionHandlerAdvice {
     public ResponseEntity<ErrorDto> handleException(MethodArgumentNotValidException e, HttpServletRequest httpRequest) {
 
         var fieldError = e.getFieldError();
-        ErrorDto error = new ErrorDto("EC002", fieldError.getDefaultMessage());
+        ErrorDto error = new ErrorDto("EC002", fieldError.getField() + " " + fieldError.getDefaultMessage());
         logException(e);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }

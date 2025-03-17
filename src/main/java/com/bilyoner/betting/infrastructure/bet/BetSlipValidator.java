@@ -4,19 +4,29 @@ import com.bilyoner.betting.contract.BetSlipDto;
 import com.bilyoner.betting.infrastructure.config.BettingConfig;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 @Component
 @RequiredArgsConstructor
 public class BetSlipValidator implements ConstraintValidator<ValidBetSlip, BetSlipDto> {
 
     private final BettingConfig bettingConfig;
+    private final Validator validator;
+
 
     @Override
     public boolean isValid(BetSlipDto betSlip, ConstraintValidatorContext context) {
+
+        if (betSlip.getBetAmount() == null || betSlip.getEventId() == null) {
+            return false;
+        }
 
         if (betSlip.getCouponCount() > bettingConfig.getMaxCouponCount()) {
             context.disableDefaultConstraintViolation();

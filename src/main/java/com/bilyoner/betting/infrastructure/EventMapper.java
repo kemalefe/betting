@@ -1,4 +1,4 @@
-package com.bilyoner.betting.infrastructure.mapper;
+package com.bilyoner.betting.infrastructure;
 
 import com.bilyoner.betting.contract.EventDto;
 import com.bilyoner.betting.domain.bet.Event;

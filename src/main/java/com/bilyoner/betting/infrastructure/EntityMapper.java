@@ -1,4 +1,4 @@
-package com.bilyoner.betting.infrastructure.mapper;
+package com.bilyoner.betting.infrastructure;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.MappingTarget;

@@ -2,7 +2,6 @@ package com.bilyoner.betting.infrastructure.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +11,6 @@ import java.util.concurrent.Executors;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-@EnableConfigurationProperties(BettingConfig.class)
 public class ExecutorConfig {
 
     private final BettingConfig bettingConfig;

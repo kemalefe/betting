@@ -5,7 +5,7 @@ import com.bilyoner.betting.contract.EventDto;
 import com.bilyoner.betting.domain.bet.Event;
 import com.bilyoner.betting.domain.bet.EventRepository;
 import com.bilyoner.betting.domain.exception.EventNotFoundException;
-import com.bilyoner.betting.infrastructure.mapper.EventMapper;
+import com.bilyoner.betting.infrastructure.EventMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
