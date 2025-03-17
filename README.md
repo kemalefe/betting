@@ -34,7 +34,7 @@ gradle clean build --refresh-dependencies
 
 The application provides configuration options through the application.properties or application.yml file. Here, you can set values for server ports, database connections, and caching properties. All betting application specific properties placed below property.
 
-```
+```yaml
 betting:
   bet-finalize-timeout: 2 # as seconds
   max-coupon-count: 500
