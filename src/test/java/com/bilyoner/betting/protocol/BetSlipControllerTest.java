@@ -146,6 +146,25 @@ class BetSlipControllerTest {
     }
 
     @Test
+    void initializeBetSlip_ShouldReturnUnauthorized_WhenCustomerHeaderIsMissing() throws Exception {
+
+        BetSlipDto betSlipDto = new BetSlipDto();
+
+        BetSlipInitializeResponse expectedResponse = new BetSlipInitializeResponse();
+
+        when(betSlipService.initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class)))
+                .thenReturn(expectedResponse);
+
+        mockMvc.perform(post("/api/bet-slip/initialize")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(betSlipDto)))
+                .andExpect(status().isUnauthorized());
+
+        verify(betSlipService, never()).initializeBetSlip(any(CustomerDto.class), any(BetSlipDto.class));
+
+    }
+
+    @Test
     void finalizeBetSlip_ShouldReturnResponseEntity() throws Exception {
         String inquiryId = "testInquiryId";
         BetSlipFinalizeResponse expectedResponse = new BetSlipFinalizeResponse(true);
