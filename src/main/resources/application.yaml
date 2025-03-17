@@ -37,7 +37,7 @@ springdoc:
     path: /swagger-ui.html
 
 betting:
-  bet-finalize-timeout: 30 # as seconds
+  bet-finalize-timeout: 2 # as seconds
   max-coupon-count: 500
   max-total-bet-amount: 10000
   odds:
