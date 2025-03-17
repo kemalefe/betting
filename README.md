@@ -75,7 +75,7 @@ Unit tests are available for services and controllers to verify the core logic a
 #### 1. Get Bulletin
 Streams real-time bulletin updates. It provides updates at a regular interval based (1 sec.) on the configured duration.
 ```http
-  GET /api/bulletin
+GET /api/bulletin
 ```
 
 #### 2. Get Events
@@ -209,7 +209,7 @@ Response:
 Finalises the bet slip based on the given query ID. If user tries to finalise an initialised slip after n seconds (configured in application.yml), system will automatically initialise a new slip with previous slip data with updated odds. Otherwise system will return successfully created slip data.
 
 ```http
-POST /api/bet-slip/initialize
+GET /api/bet-slip/finalize/{inquiry-id}
 ```
 | Header          | Type   | Description               |
 |:----------------|:-------|:--------------------------|
