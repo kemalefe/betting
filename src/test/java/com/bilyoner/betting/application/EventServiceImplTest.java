@@ -1,10 +1,10 @@
 package com.bilyoner.betting.application;
 
-import com.bilyoner.betting.contract.EventDto;
-import com.bilyoner.betting.domain.Event;
-import com.bilyoner.betting.domain.EventRepository;
-import com.bilyoner.betting.domain.exception.EventNotFoundException;
 import com.bilyoner.betting.contract.BetOddsDto;
+import com.bilyoner.betting.contract.EventDto;
+import com.bilyoner.betting.domain.bet.Event;
+import com.bilyoner.betting.domain.bet.EventRepository;
+import com.bilyoner.betting.domain.exception.EventNotFoundException;
 import com.bilyoner.betting.infrastructure.mapper.EventMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -93,9 +93,7 @@ class EventServiceImplTest {
         when(eventRepository.save(eventEntity)).thenReturn(eventEntity);
         when(eventMapper.toDto(eventEntity)).thenReturn(eventDto);
 
-
         EventDto result = eventService.addEvent(eventDto);
-
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(10L);
@@ -124,13 +122,10 @@ class EventServiceImplTest {
     void shouldUpdateEvent() {
 
         when(eventRepository.findById(10L)).thenReturn(Optional.of(eventEntity));
-        //when(eventMapper.partialUpdate(eventEntity, eventDto)).
         when(eventRepository.save(eventEntity)).thenReturn(eventEntity);
         when(eventMapper.toDto(eventEntity)).thenReturn(eventDto);
 
-
         EventDto result = eventService.updateEvent(eventDto);
-
 
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(10L);

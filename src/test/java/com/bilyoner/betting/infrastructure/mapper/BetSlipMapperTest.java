@@ -2,9 +2,8 @@ package com.bilyoner.betting.infrastructure.mapper;
 
 import com.bilyoner.betting.contract.BetSlipDto;
 import com.bilyoner.betting.contract.BetType;
-import com.bilyoner.betting.domain.BetSlip;
+import com.bilyoner.betting.domain.bet.BetSlip;
 import org.junit.jupiter.api.Test;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -48,7 +47,7 @@ class BetSlipMapperTest {
         assertThat(betSlip.getCouponCount()).isEqualTo(betSlipDto.getCouponCount());
         assertThat(betSlip.getBetAmount()).isEqualTo(betSlipDto.getBetAmount());
         assertThat(betSlip.getCurrencyCode()).isEqualTo(betSlipDto.getCurrencyCode());
-        assertThat(betSlip.getCreateDate()).isNotNull();  // timestamp dönüşümü
+        assertThat(betSlip.getCreateDate()).isNotNull();
     }
 
     @Test
@@ -75,7 +74,7 @@ class BetSlipMapperTest {
         assertThat(betSlipDto.getCouponCount()).isEqualTo(betSlip.getCouponCount());
         assertThat(betSlipDto.getBetAmount()).isEqualTo(betSlip.getBetAmount());
         assertThat(betSlipDto.getCurrencyCode()).isEqualTo(betSlip.getCurrencyCode());
-        assertThat(betSlipDto.getTimestamp()).isNotNull();  // createDate dönüşümü
+        assertThat(betSlipDto.getTimestamp()).isNotNull();
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.bilyoner.betting.domain;
+package com.bilyoner.betting.domain.bet;
 
 import com.bilyoner.betting.contract.BetType;
 import jakarta.persistence.*;

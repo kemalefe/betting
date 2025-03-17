@@ -1,7 +1,7 @@
 package com.bilyoner.betting.infrastructure.mapper;
 
 import com.bilyoner.betting.contract.EventDto;
-import com.bilyoner.betting.domain.Event;
+import com.bilyoner.betting.domain.bet.Event;
 import com.bilyoner.betting.contract.BetOddsDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -33,7 +33,8 @@ public class BulletinController {
                             description = "Successfully streamed bulletin updates",
                             content = @Content(mediaType = MediaType.TEXT_EVENT_STREAM_VALUE, schema = @Schema(implementation = BulletinResponse.class))
                     ),
-                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json"))
             }
     )
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)

@@ -1,7 +1,7 @@
 package com.bilyoner.betting.infrastructure.mapper;
 
 import com.bilyoner.betting.contract.EventDto;
-import com.bilyoner.betting.domain.Event;
+import com.bilyoner.betting.domain.bet.Event;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED, nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, unmappedTargetPolicy = ReportingPolicy.IGNORE)

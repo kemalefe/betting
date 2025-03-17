@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -47,10 +48,11 @@ public class EventController {
                             content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = EventDto.class))
                     ),
                     @ApiResponse(
-                            responseCode = "404",
+                            responseCode = "500",
                             description = "Event not found",
                             content = @Content(mediaType = "application/json")
-                    )
+                    ),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json"))
             }
     )
     @GetMapping("/{id}")
@@ -67,10 +69,12 @@ public class EventController {
                             description = "Event successfully created",
                             content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = EventDto.class))
                     ),
-                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = "application/json"))
             }
     )
     @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
     public EventDto add(@RequestBody EventDto event) {
         return eventService.addEvent(event);
     }

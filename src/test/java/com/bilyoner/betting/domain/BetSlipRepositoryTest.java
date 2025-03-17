@@ -1,6 +1,8 @@
 package com.bilyoner.betting.domain;
 
 import com.bilyoner.betting.contract.BetType;
+import com.bilyoner.betting.domain.bet.BetSlip;
+import com.bilyoner.betting.domain.bet.BetSlipRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,8 @@ class BetSlipRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        // BetSlip nesnesi oluşturuluyor
         betSlip = new BetSlip();
+
         betSlip.setCustomerId(123L);
         betSlip.setEventId(456L);
         betSlip.setBetType(BetType.HOME_WIN);

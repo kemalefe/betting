@@ -1,8 +1,8 @@
 package com.bilyoner.betting.application;
 
 import com.bilyoner.betting.contract.EventDto;
-import com.bilyoner.betting.domain.Event;
-import com.bilyoner.betting.domain.EventRepository;
+import com.bilyoner.betting.domain.bet.Event;
+import com.bilyoner.betting.domain.bet.EventRepository;
 import com.bilyoner.betting.domain.exception.EventNotFoundException;
 import com.bilyoner.betting.infrastructure.mapper.EventMapper;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.bilyoner.betting.contract;
 
+import com.bilyoner.betting.infrastructure.bet.ValidBetSlip;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -10,13 +10,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@ValidBetSlip
 public class BetSlipDto {
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -30,7 +28,6 @@ public class BetSlipDto {
     @NotNull
     private BigDecimal betOdds;
     @Positive
-    @Max(value = 500, message = "Coupon count could not be gt 500 for single bet slip.")
     private int couponCount;
     @Positive
     private BigDecimal betAmount;

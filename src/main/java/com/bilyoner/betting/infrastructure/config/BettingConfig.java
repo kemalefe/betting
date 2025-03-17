@@ -5,6 +5,8 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @ConfigurationProperties(prefix = "betting")
@@ -12,6 +14,7 @@ public class BettingConfig {
 
     Long betFinalizeTimeout;
     Integer maxCouponCount;
+    BigDecimal maxTotalBetAmount;
 
     @NestedConfigurationProperty
     OddsConfig odds;

@@ -38,6 +38,8 @@ springdoc:
 
 betting:
   bet-finalize-timeout: 30 # as seconds
+  max-coupon-count: 500
+  max-total-bet-amount: 10000
   odds:
     min-value: 1.5
     max-value: 3.0

@@ -1,7 +1,7 @@
 package com.bilyoner.betting.infrastructure.mapper;
 
 import com.bilyoner.betting.contract.BetSlipDto;
-import com.bilyoner.betting.domain.BetSlip;
+import com.bilyoner.betting.domain.bet.BetSlip;
 import org.mapstruct.*;
 
 import java.time.Instant;

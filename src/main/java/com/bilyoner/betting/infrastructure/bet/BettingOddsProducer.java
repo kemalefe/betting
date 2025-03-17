@@ -1,8 +1,8 @@
 package com.bilyoner.betting.infrastructure.bet;
 
 import com.bilyoner.betting.contract.BetOddsDto;
-import com.bilyoner.betting.domain.Event;
-import com.bilyoner.betting.domain.EventRepository;
+import com.bilyoner.betting.domain.bet.Event;
+import com.bilyoner.betting.domain.bet.EventRepository;
 import com.bilyoner.betting.infrastructure.config.BettingConfig;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.bilyoner.betting.domain;
+package com.bilyoner.betting.domain.bet;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

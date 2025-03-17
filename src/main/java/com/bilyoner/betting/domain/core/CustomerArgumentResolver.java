@@ -25,7 +25,7 @@ public class CustomerArgumentResolver implements HandlerMethodArgumentResolver {
             throw new MissingRequestHeaderException("x-customer-id", parameter);
         }
 
-        // mock - bearer authentication  could be implemented
+        // mock - no authentication
         return new CustomerDto(Long.parseLong(customerId), "Kemal", "Efe");
     }
 

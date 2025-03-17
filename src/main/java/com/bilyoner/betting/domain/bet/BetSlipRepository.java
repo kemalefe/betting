@@ -1,4 +1,4 @@
-package com.bilyoner.betting.domain;
+package com.bilyoner.betting.domain.bet;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

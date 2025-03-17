@@ -1,5 +1,7 @@
 package com.bilyoner.betting.domain;
 
+import com.bilyoner.betting.domain.bet.Event;
+import com.bilyoner.betting.domain.bet.EventRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

@@ -36,7 +36,7 @@ public class BetSlipController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = BetSlipInitializeResponse.class))
                     ),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "Customer not found", content = @Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "401", description = "Customer not found", content = @Content(mediaType = "application/json"))
             }
     )
     @PostMapping(path = "/initialize")
@@ -54,8 +54,8 @@ public class BetSlipController {
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = BetSlipFinalizeResponse.class))
                     ),
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "404", description = "Bet slip not found", content = @Content(mediaType = "application/json")),
-                    @ApiResponse(responseCode = "410", description = "Bet slip expired", content = @Content(mediaType = "application/json"))
+                    @ApiResponse(responseCode = "500", description = "Bet slip not found", content = @Content(mediaType = "application/json")),
+                    @ApiResponse(responseCode = "500", description = "Bet slip expired", content = @Content(mediaType = "application/json"))
             }
     )
     @GetMapping(path = "/finalize/{inquiryId}")
