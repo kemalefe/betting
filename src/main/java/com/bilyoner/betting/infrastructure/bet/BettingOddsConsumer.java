@@ -46,7 +46,7 @@ public class BettingOddsConsumer {
                     updates.add(bettingOddsQueue.take());
                 }
 
-                log.info("processing {} updates, queue count: {}", updates.size(), bettingOddsQueue.size());
+                log.debug("processing {} updates, queue count: {}", updates.size(), bettingOddsQueue.size());
                 for (BetOddsDto update : updates) {
                     eventBettingOddsUpdatingService.updateBetOdds(update);
                 }
