@@ -1,8 +1,8 @@
 package com.bilyoner.betting.infrastructure;
 
+import com.bilyoner.betting.contract.BetOddsDto;
 import com.bilyoner.betting.contract.EventDto;
 import com.bilyoner.betting.domain.bet.Event;
-import com.bilyoner.betting.contract.BetOddsDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,7 +44,6 @@ class EventMapperTest {
         assertThat(eventDto.getBetOddsDto().getDrawBetOdds()).isEqualTo(event.getDrawBetOdds());
         assertThat(eventDto.getBetOddsDto().getAwayWinBetOdds()).isEqualTo(event.getAwayWinBetOdds());
         assertThat(eventDto.getBetOddsDto().getEventId()).isEqualTo(event.getId());
-        assertThat(eventDto.getBetOddsDto().getUpdateTimestamp()).isZero();
     }
 
     @Test
@@ -56,7 +55,6 @@ class EventMapperTest {
         eventDto.setAwayTeam("Team B");
         BetOddsDto betOddsDto = new BetOddsDto(1L, new BigDecimal("1.5"), new BigDecimal("3.0"), new BigDecimal("2.5"));
         eventDto.setBetOddsDto(betOddsDto);
-        eventDto.setUpdateMillis(0L);
         eventDto.setMatchStartTime(LocalDateTime.now());
 
         Event event = eventMapper.toEntity(eventDto);

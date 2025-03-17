@@ -1,8 +1,8 @@
 package com.bilyoner.betting.protocol;
 
 import com.bilyoner.betting.application.EventBettingOddsUpdatingService;
-import com.bilyoner.betting.contract.EventDto;
 import com.bilyoner.betting.contract.BetOddsDto;
+import com.bilyoner.betting.contract.EventDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,13 +30,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(EventController.class)
 class EventControllerTest {
 
+    private final ObjectMapper objectMapper = new Jackson2ObjectMapperBuilder().build();
     @Autowired
     private MockMvc mockMvc;
-
     @MockitoBean
     private EventBettingOddsUpdatingService eventService;
 
-    private final ObjectMapper objectMapper = new Jackson2ObjectMapperBuilder().build();
+    private static EventDto getEventDto() {
+        EventDto event = new EventDto();
+        event.setId(1L);
+        event.setHomeTeam("Fenerbahçe");
+        event.setAwayTeam("Galatasaray");
+        event.setLeagueName("Turkish Super League");
+        event.setBetOddsDto(new BetOddsDto(1L, BigDecimal.valueOf(1.5), BigDecimal.valueOf(2.21), BigDecimal.valueOf(1.45)));
+        event.setMatchStartTime(LocalDateTime.of(2025, 7, 13, 21, 45));
+        return event;
+    }
 
     @Test
     void shouldGetAllEvents() throws Exception {
@@ -88,16 +97,5 @@ class EventControllerTest {
                 .andExpect(jsonPath("$.awayTeam").value("Galatasaray"));
 
         verify(eventService).addEvent(any(EventDto.class));
-    }
-
-    private static EventDto getEventDto() {
-        EventDto event = new EventDto();
-        event.setId(1L);
-        event.setHomeTeam("Fenerbahçe");
-        event.setAwayTeam("Galatasaray");
-        event.setLeagueName("Turkish Super League");
-        event.setBetOddsDto(new BetOddsDto(1L, BigDecimal.valueOf(1.5), BigDecimal.valueOf(2.21), BigDecimal.valueOf(1.45)));
-        event.setMatchStartTime(LocalDateTime.of(2025, 7, 13, 21, 45));
-        return event;
     }
 }

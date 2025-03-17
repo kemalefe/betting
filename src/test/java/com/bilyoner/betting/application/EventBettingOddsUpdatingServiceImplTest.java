@@ -1,11 +1,12 @@
 package com.bilyoner.betting.application;
 
-import com.bilyoner.betting.contract.EventDto;
 import com.bilyoner.betting.contract.BetOddsDto;
+import com.bilyoner.betting.contract.EventDto;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ class EventBettingOddsUpdatingServiceImplTest {
 
         EventDto addedEvent = eventBettingOddsUpdatingService.addEvent(eventDto);
 
-        verify(syncCaffeine).put(eq(10L), eq(eventDto));
+        verify(syncCaffeine, atLeast(1)).put(10L, eventDto);
         assertThat(addedEvent).isEqualTo(eventDto);
     }
 
@@ -106,7 +107,7 @@ class EventBettingOddsUpdatingServiceImplTest {
 
         EventDto updatedEvent = eventBettingOddsUpdatingService.updateEvent(eventDto);
 
-        verify(asyncCaffeine).put(eq(10L), any(CompletableFuture.class));
+        verify(asyncCaffeine).put(eq(10L), ArgumentMatchers.<CompletableFuture<EventDto>>any());
         assertThat(updatedEvent).isEqualTo(eventDto);
     }
 

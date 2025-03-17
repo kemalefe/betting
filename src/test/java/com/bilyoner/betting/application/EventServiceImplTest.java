@@ -37,12 +37,6 @@ class EventServiceImplTest {
     private Event eventEntity;
     private EventDto eventDto;
 
-    @BeforeEach
-    void setUp() {
-        eventDto = getEventDto();
-        eventEntity = getEventEntity();
-    }
-
     private static EventDto getEventDto() {
         EventDto event = new EventDto();
         event.setId(10L);
@@ -65,6 +59,12 @@ class EventServiceImplTest {
         event.setHomeWinBetOdds(BigDecimal.valueOf(1.5));
         event.setMatchStartTime(LocalDateTime.of(2025, 7, 13, 21, 45));
         return event;
+    }
+
+    @BeforeEach
+    void setUp() {
+        eventDto = getEventDto();
+        eventEntity = getEventEntity();
     }
 
     @Test

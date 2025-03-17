@@ -25,4 +25,8 @@ public class BettingOddsQueue {
     public int drainTo(List<BetOddsDto> updates, int prefetchCount) {
         return betOddsDtoQueue.drainTo(updates, prefetchCount);
     }
+
+    public int size() {
+        return betOddsDtoQueue.size();
+    }
 }

@@ -4,14 +4,11 @@ import com.bilyoner.betting.contract.BetSlipDto;
 import com.bilyoner.betting.infrastructure.config.BettingConfig;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
-import jakarta.validation.groups.Default;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 @Component
 @RequiredArgsConstructor

@@ -3,7 +3,6 @@ package com.bilyoner.betting.contract;
 import com.bilyoner.betting.infrastructure.bet.ValidBetSlip;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
@@ -28,9 +27,12 @@ public class BetSlipDto {
     @NotNull
     private BetType betType;
     @NotNull
-    private BigDecimal betOdds;
     @Positive
-    private int couponCount;
+    private BigDecimal betOdds;
+    @NotNull
+    @Positive
+    private Integer couponCount;
+    @NotNull
     @Positive
     private BigDecimal betAmount;
     @NotNull
@@ -48,6 +50,6 @@ public class BetSlipDto {
         this.couponCount = other.getCouponCount();
         this.betAmount = other.getBetAmount();
         this.currencyCode = other.getCurrencyCode();
-        this.timestamp = other.getTimestamp();
+        this. timestamp = other.getTimestamp();
     }
 }

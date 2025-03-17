@@ -3,9 +3,8 @@ package com.bilyoner.betting.contract;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.builder.EqualsExclude;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -26,12 +25,8 @@ public class EventDto {
     private LocalDateTime matchStartTime;
     @NotNull
     private BetOddsDto betOddsDto;
-    @EqualsExclude
-    private Long updateMillis;
-
 
     public void updateBetOdds(BetOddsDto update) {
-        this.updateMillis = betOddsDto.getUpdateTimestamp() != null ? System.currentTimeMillis() - betOddsDto.getUpdateTimestamp() : 0;
         this.betOddsDto = new BetOddsDto(id, update.getHomeWinBetOdds(), update.getDrawBetOdds(), update.getAwayWinBetOdds());
 
     }

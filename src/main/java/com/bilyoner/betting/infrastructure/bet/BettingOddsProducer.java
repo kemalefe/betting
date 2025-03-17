@@ -34,7 +34,7 @@ public class BettingOddsProducer {
 
     @Scheduled(fixedRateString = "${betting.odds.update-interval}")
     public void start() {
-        log.info("Starting {} producer threads...", bettingConfig.getProducer().getThreads());
+         log.debug("Starting {} producer threads...", bettingConfig.getProducer().getThreads());
         updateBetOdds();
     }
 

@@ -21,14 +21,4 @@ public class BetOddsDto {
     private BigDecimal drawBetOdds;
     @Positive
     private BigDecimal awayWinBetOdds;
-    @EqualsAndHashCode.Exclude
-    private Long updateTimestamp;
-
-    public BetOddsDto(Long eventId, BigDecimal homeWinBetOdds, BigDecimal drawBetOdds, BigDecimal awayWinBetOdds) {
-        this.eventId = eventId;
-        this.homeWinBetOdds = homeWinBetOdds;
-        this.drawBetOdds = drawBetOdds;
-        this.awayWinBetOdds = awayWinBetOdds;
-        this.updateTimestamp = System.currentTimeMillis();
-    }
 }
