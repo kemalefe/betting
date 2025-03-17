@@ -4,6 +4,7 @@ import com.bilyoner.betting.contract.BetSlipDto;
 import com.bilyoner.betting.contract.BetSlipFinalizeResponse;
 import com.bilyoner.betting.contract.BetSlipInitializeResponse;
 import com.bilyoner.betting.domain.BetSlipRepository;
+import com.bilyoner.betting.domain.core.CustomerDto;
 import com.bilyoner.betting.domain.exception.BetSlipExpiredException;
 import com.bilyoner.betting.infrastructure.config.BettingConfig;
 import com.bilyoner.betting.infrastructure.mapper.BetSlipMapper;
@@ -40,7 +41,7 @@ public class BetSlipServiceImpl implements BetSlipService, InitializingBean {
     }
 
     @Override
-    public BetSlipInitializeResponse initializeBetSlip(BetSlipDto betSlip) {
+    public BetSlipInitializeResponse initializeBetSlip(CustomerDto customer, BetSlipDto betSlip) {
 
         var event = eventBettingOddsUpdatingService.getEvent(betSlip.getEventId());
 
@@ -53,16 +54,16 @@ public class BetSlipServiceImpl implements BetSlipService, InitializingBean {
         betSlip.setBetOdds(betOdds);
         betSlip.setTimestamp(System.currentTimeMillis());
 
-        String uuid = UUID.randomUUID().toString();
-        betSlipCaffeine.put(uuid, betSlip);
+        String inquiryId = UUID.randomUUID().toString();
+        betSlipCaffeine.put(inquiryId, betSlip);
 
-        return new BetSlipInitializeResponse(uuid, betOddsChanges, bettingConfig.getBetFinalizeTimeout(), betSlip);
+        return new BetSlipInitializeResponse(inquiryId, betOddsChanges, bettingConfig.getBetFinalizeTimeout(), betSlip);
     }
 
     @Override
-    public BetSlipFinalizeResponse finalizeBetSlip(String uuid) throws BetSlipExpiredException {
+    public BetSlipFinalizeResponse finalizeBetSlip(CustomerDto customer, String inquiryId) throws BetSlipExpiredException {
 
-        BetSlipDto betSlipDto = betSlipCaffeine.getIfPresent(uuid);
+        BetSlipDto betSlipDto = betSlipCaffeine.getIfPresent(inquiryId);
         if (betSlipDto == null)
             throw new BetSlipExpiredException("Bet slip has been expired, please initialize a new bet slip.");
 
@@ -71,16 +72,16 @@ public class BetSlipServiceImpl implements BetSlipService, InitializingBean {
         var maximumAllowedDifference = bettingConfig.getBetFinalizeTimeout() * 1000L;
 
         if (currentTimestamp - betSlipTimestamp > maximumAllowedDifference) {
-            betSlipCaffeine.invalidate(uuid);
-            var initializeBetSlip = initializeBetSlip(new BetSlipDto(betSlipDto));
+            betSlipCaffeine.invalidate(inquiryId);
+            var initializeBetSlip = initializeBetSlip(customer, new BetSlipDto(betSlipDto));
             return new BetSlipFinalizeResponse(initializeBetSlip);
         }
 
-        var betSlip = betSlipMapper.toEntity(betSlipDto);
+        var betSlip = betSlipMapper.toEntity(betSlipDto, customer.getId());
         betSlip = betSlipRepository.save(betSlip);
-        betSlipDto.setId(betSlip.getId());
+        betSlipDto = betSlipMapper.toDto(betSlip);
 
-        betSlipCaffeine.invalidate(uuid);
+        betSlipCaffeine.invalidate(inquiryId);
         return new BetSlipFinalizeResponse(true, betSlipDto);
     }
 }

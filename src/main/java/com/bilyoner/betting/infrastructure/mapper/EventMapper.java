@@ -13,4 +13,10 @@ public interface EventMapper extends EntityMapper<EventDto, Event> {
     @Mapping(source = "id", target = "betOddsDto.eventId")
     @Mapping(target = "betOddsDto.updateTimestamp", expression = "java(0L)")
     EventDto toDto(Event event);
+
+
+    @Mapping(source = "betOddsDto.homeWinBetOdds", target = "homeWinBetOdds")
+    @Mapping(source = "betOddsDto.drawBetOdds", target = "drawBetOdds")
+    @Mapping(source = "betOddsDto.awayWinBetOdds", target = "awayWinBetOdds")
+    Event toEntity(EventDto eventDto);
 }

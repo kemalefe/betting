@@ -1,7 +1,7 @@
 package com.bilyoner.betting.application;
 
 import com.bilyoner.betting.contract.EventDto;
-import com.bilyoner.betting.infrastructure.bet.BetOddsDto;
+import com.bilyoner.betting.contract.BetOddsDto;
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class EventBettingOddsUpdatingServiceImpl implements InitializingBean, EventBettingOddsUpdatingService {
 
-    private AsyncLoadingCache<Long, EventDto> caffeine;
     private final EventService eventService;
+    private AsyncLoadingCache<Long, EventDto> caffeine;
 
     @Override
     public void afterPropertiesSet() {
@@ -71,7 +71,7 @@ public class EventBettingOddsUpdatingServiceImpl implements InitializingBean, Ev
     public EventDto updateEvent(EventDto eventDto) {
         // update cache
         caffeine.put(eventDto.getId(), CompletableFuture.supplyAsync(() -> eventDto));
-        // persist - maybe later?
+        // persist - maybe async ?
         return eventService.updateEvent(eventDto);
     }
 

@@ -1,14 +1,20 @@
 package com.bilyoner.betting.infrastructure.bet;
 
 import com.bilyoner.betting.application.EventBettingOddsUpdatingService;
+import com.bilyoner.betting.contract.BetOddsDto;
 import com.bilyoner.betting.infrastructure.config.BettingConfig;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+@Profile("!test")
 @RequiredArgsConstructor
 @Component
 @Slf4j
@@ -19,6 +25,7 @@ public class BettingOddsConsumer {
     private final EventBettingOddsUpdatingService eventBettingOddsUpdatingService;
     private final BettingOddsQueue bettingOddsQueue;
     private final ExecutorService consumerExecutor;
+    private final AtomicBoolean running = new AtomicBoolean(true);
 
     public void start() {
 
@@ -31,7 +38,7 @@ public class BettingOddsConsumer {
 
     private void startConsuming() {
 
-        while (true) {
+        while (running.get()) {
             try {
                 var updates = new ArrayList<BetOddsDto>();
                 bettingOddsQueue.drainTo(updates, bettingConfig.getConsumer().getPrefetchCount());
@@ -43,16 +50,24 @@ public class BettingOddsConsumer {
                 for (BetOddsDto update : updates) {
                     eventBettingOddsUpdatingService.updateBetOdds(update);
                 }
-            } catch (Exception e) {
-                handleException(e);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
         }
     }
 
-    private static void handleException(Exception e) {
-        if (e instanceof InterruptedException)
-            Thread.currentThread().interrupt();
+    @PreDestroy
+    public void shutdown() {
+        log.info("Shutting down consumer threads...");
+        running.set(false);
+        try {
+            boolean terminated = consumerExecutor.awaitTermination(10L, TimeUnit.SECONDS);
+            if (!terminated)
+                consumerExecutor.shutdownNow();
 
-        log.error("Error occurred while listening bet odds streaming queue", e);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.warn("Handle interrupted exception:{}", e.getMessage());
+        }
     }
 }

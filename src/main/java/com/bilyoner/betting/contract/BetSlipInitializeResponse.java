@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BetSlipInitializeResponse {
 
-    private String uuid;
+    private String inquiryId;
     private boolean betOddsChanged;
     private Long timeoutSeconds;
     private BetSlipDto betSlipDto;

@@ -1,10 +1,13 @@
 package com.bilyoner.betting.infrastructure.bet;
 
+import com.bilyoner.betting.contract.BetOddsDto;
 import com.bilyoner.betting.domain.Event;
 import com.bilyoner.betting.domain.EventRepository;
 import com.bilyoner.betting.infrastructure.config.BettingConfig;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.IntStream;
 
+@Profile("!test")
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -30,7 +34,7 @@ public class BettingOddsProducer {
 
     @Scheduled(fixedRateString = "${betting.odds.update-interval}")
     public void start() {
-        log.debug("start producing...");
+        log.info("Starting {} producer threads...", bettingConfig.getProducer().getThreads());
         updateBetOdds();
     }
 
@@ -66,5 +70,11 @@ public class BettingOddsProducer {
         var odds = bettingConfig.getOdds();
         double randomOdds = odds.getMinValue() + (odds.getMaxValue() - odds.getMinValue()) * random.nextDouble();
         return BigDecimal.valueOf(randomOdds).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @PreDestroy
+    public void shutdown() {
+        log.info("Shutting down producer threads...");
+        producerExecutor.shutdownNow();
     }
 }

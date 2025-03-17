@@ -1,6 +1,10 @@
 package com.bilyoner.betting.contract;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,13 +19,22 @@ import java.time.ZoneId;
 @NoArgsConstructor
 public class BetSlipDto {
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long id;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Long customerId;
+    @Positive
     private Long eventId;
+    @NotNull
     private BetType betType;
+    @NotNull
     private BigDecimal betOdds;
+    @Positive
+    @Max(value = 500, message = "Coupon count could not be gt 500 for single bet slip.")
     private int couponCount;
+    @Positive
     private BigDecimal betAmount;
+    @NotNull
     private String currencyCode;
     @JsonIgnore
     private Long timestamp;
@@ -37,11 +50,5 @@ public class BetSlipDto {
         this.betAmount = other.getBetAmount();
         this.currencyCode = other.getCurrencyCode();
         this.timestamp = other.getTimestamp();
-    }
-
-    public LocalDateTime getCreateDate() {
-        return Instant.ofEpochMilli(this.timestamp)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
     }
 }
